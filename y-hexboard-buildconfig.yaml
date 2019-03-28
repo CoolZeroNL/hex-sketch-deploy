@@ -1,0 +1,30 @@
+
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  name: hexboard
+  creationTimestamp: null
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: hhvm:latest
+  resources: {}
+  source:
+    git:
+      ref: master
+      uri: http://github.com/CoolZeroNL/hexboard
+    type: Git
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: ${BUILDER_IMAGE}
+        namespace: openshift
+    type: Source
+  output:
+    to:
+      kind: "ImageStreamTag"
+      name: "hexboard:latest"
+  status:
+   lastversion: 0
