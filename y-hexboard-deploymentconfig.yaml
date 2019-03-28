@@ -17,12 +17,6 @@ spec:
         deploymentconfig: hexboard
     spec:
       containers:
-      - livenessProbe:
-         httpGet:
-           path: /healthz
-           port: 8080
-         initialDelaySeconds: 3
-         periodSeconds: 3   
       - env:
         - name: HEXBOARD_SIZE
           value: ${HEXBOARD_SIZE}
