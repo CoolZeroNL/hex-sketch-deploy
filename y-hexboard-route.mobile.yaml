@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Route
+metadata:
+  creationTimestamp: null
+  labels:
+    app: hexboard-mobile 
+  name: hexboard-mobile
+spec:
+  host: hexboard.tempdata.nl
+  path: "/mobile"
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: hexboard
+    weight: 100
+  wildcardPolicy: None

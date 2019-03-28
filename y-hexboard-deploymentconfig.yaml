@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  creationTimestamp: null
+  name: hexboard
+spec:
+  replicas: 1
+  selector:
+    deploymentconfig: hexboard
+  strategy:
+    type: Recreate,
+    resources: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        deploymentconfig: hexboard
+    spec:
+      containers:
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: 8080
+        initialDelaySeconds: 3
+        periodSeconds: 3   
+      - env:
+        - name: HEXBOARD_SIZE
+          value: ${HEXBOARD_SIZE}
+        - name: WINNER_COUNT
+          value: ${WINNER_COUNT}
+        - name: ADMIN_TOKEN
+          value: ${ADMIN_TOKEN}
+        - name: ACCESS_TOKEN
+          value: ${ACCESS_TOKEN}                            
+        image: 'hexboard:latest'
+        name: hexboard
+        ports:
+        - name: hexboardtcp
+        - containerPort: 80
+        - protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+      securityContext:
+      - capabilities: {}
+      - privileged: false
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - hexboard
+      from:
+        kind: ImageStreamTag
+        name: hexboard:latest
+    type: ImageChange
+status: {}
